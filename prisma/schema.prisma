@@ -1,0 +1,219 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("VERCEL_DATABASE_URL")
+}
+
+model User {
+  id               String          @id
+  name             String
+  email            String          @unique
+  password         String          @default("")
+  role             Role
+  schoolId         String
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  tempPassword     String?
+  Parent           Parent?
+  RefreshTokens    RefreshTokens[]
+  Staff            Staff?
+  Student          Student?
+  school           School          @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model RefreshTokens {
+  id         String   @id @default(uuid())
+  userId     String
+  tokenHash  String   @unique
+  deviceInfo String   @default("")
+  ipAddress  String   @default("")
+  createdAt  DateTime @default(now())
+  expiresOn  DateTime
+  lastUsed   DateTime
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Staff {
+  id              String   @id
+  name            String
+  image           String   @default("")
+  email           String   @unique
+  oracleNo        String
+  registrationNo  String
+  designation     String
+  post            String
+  payrollNo       String
+  level           String
+  yearOfService   Int
+  teaching        Boolean
+  address         String
+  phoneNo         String
+  yearOfExit      Int
+  schoolId        String
+  admin           Boolean  @default(false)
+  classesTeaching String[] @default([])
+  subjectsTaught  String[] @default([])
+  User            User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model Parent {
+  id       String    @id
+  email    String    @unique
+  name     String
+  phoneNo  String
+  address  String
+  schoolId String
+  User     User      @relation(fields: [id], references: [id], onDelete: Cascade)
+  school   School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  Student  Student[]
+}
+
+model Student {
+  id             String       @id
+  name           String
+  image          String       @default("")
+  email          String       @unique
+  parentId       String
+  parentNo       String
+  parentName     String
+  registrationNo String
+  admissionNo    String
+  birthdate      String
+  gender         Gender
+  DOA            String
+  class          String
+  address        String
+  schoolId       String
+  Attendance     Attendance[]
+  User           User         @relation(fields: [id], references: [id], onDelete: Cascade)
+  parent         Parent       @relation(fields: [parentId], references: [id])
+  school         School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model School {
+  id                  String         @id @default(uuid())
+  name                String
+  address             String
+  primaryColor        String         @default("")
+  primaryColorLight   String         @default("")
+  secondaryColor      String         @default("")
+  secondaryColorLight String         @default("")
+  accentColor1        String         @default("")
+  accentColor1Light   String         @default("")
+  accentColor2        String         @default("")
+  accentColor2Light   String         @default("")
+  accentColor3        String         @default("")
+  accentColor3Light   String         @default("")
+  logo                String
+  missionStatement    String         @default("")
+  visionStatement     String         @default("")
+  principal           String
+  vicePrincipal       String
+  slogan              String
+  type                SchoolType
+  startHour           String
+  closeHour           String
+  timetableHtml       String
+  admins              String[]
+  announcements       Announcement[]
+  attendances         Attendance[]
+  classes             Class[]
+  events              Event[]
+  parents             Parent[]
+  staffs              Staff[]
+  students            Student[]
+  subjects            Subject[]
+  timetables          Timetable[]
+  users               User[]
+}
+
+model Subject {
+  id       String   @id @default(uuid())
+  name     String
+  teachers String[] @default([])
+  schoolId String
+  school   School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model Class {
+  id           String       @id @default(uuid())
+  name         String
+  totalStudent Int          @default(0)
+  classTeacher String
+  schoolId     String
+  Attendance   Attendance[]
+  school       School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model Timetable {
+  id         String @id @default(uuid())
+  day        String
+  startTime  String
+  endTime    String
+  class      String
+  subject    String
+  period     Int
+  periodSpan Int
+  schoolId   String
+  school     School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model Attendance {
+  id        String         @id @default(uuid())
+  date      DateTime
+  schoolId  String
+  studentId String
+  classId   String
+  status    AttendanceType
+  class     Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  student   Student        @relation(fields: [studentId], references: [id])
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  startTime   String
+  endTime     String
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+  PARENT
+  NONTEACHING
+}
+
+enum SchoolType {
+  PRIMARY
+  JUNIOR
+  SENIOR
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum AttendanceType {
+  PRESENT
+  ABSENT
+}

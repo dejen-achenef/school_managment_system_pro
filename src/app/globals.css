@@ -1,0 +1,164 @@
+:root {
+  --primary: black;
+  --primary-light: #1f1e1e;
+  --secondary: white;
+  --secondary-light: #ffffffef;
+  --accent-1: #ceebfa;
+  --accent-1-light: #edf9fb;
+  --accent-2: #cfceff;
+  --accent-2-light: #f1f0ff;
+  --accent-3: #fae27c;
+  --accent-3-light: #fefce8;
+}
+
+* {
+  @apply text-secondary;
+}
+
+.input {
+  @apply bg-transparent text-secondary disabled:opacity-50;
+}
+
+.button {
+  @apply bg-secondary text-primary py-2 px-3 rounded-lg font-bold flex gap-2 items-center w-fit disabled:opacity-50 active:scale-95 transition duration-500 ease-in-out;
+}
+
+.clip-text {
+  @apply bg-clip-text;
+  -webkit-background-clip: text;
+}
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  padding: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.79);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(128, 128, 128, 0.9);
+}
+
+.react-calendar {
+  @apply !w-full !border-none !bg-primary !text-secondary !text-center !rounded-md;
+}
+
+.react-calendar__navigation__label {
+  @apply !font-bold;
+}
+
+.react-calendar__month-view__days {
+  @apply !gap-2;
+}
+
+.react-calendar__tile {
+  @apply !rounded-md m-2;
+}
+
+.react-calendar__tile--now {
+  @apply !bg-accent-3;
+}
+
+.react-calendar__tile--active {
+  @apply !bg-accent-1;
+}
+
+.rbc-calendar {
+  @apply !text-[12px];
+}
+
+.rbc-btn-group:first-child {
+  @apply !hidden;
+}
+
+.rbc-toolbar-label {
+  @apply !text-right !font-semibold;
+}
+
+.rbc-btn-group {
+  @apply !text-sm !border-none;
+}
+
+.rbc-btn-group button {
+  @apply !bg-secondary !text-primary !shadow-none !border-none;
+}
+
+.rbc-btn-group > .rbc-active {
+  @apply !bg-accent-2;
+}
+
+.rbc-time-view {
+  @apply !border-[#eee];
+}
+
+.rbc-time-content {
+  @apply !border-none;
+}
+
+.rbc-time-gutter.rbc-time-column .rbc-timeslot-group {
+  @apply !px-[20px];
+}
+
+.rbc-timeslot-group,
+.rbc-time-header {
+  @apply !bg-primary;
+}
+
+.rbc-event-label {
+  @apply !text-[10px] !text-gray-400;
+}
+
+.rbc-event-content {
+  @apply !font-bold text-black mt-5;
+}
+
+.rbc-today,
+.rbc-today > .rbc-timeslot-group {
+  @apply !bg-primary-light;
+}
+
+.rbc-event {
+  @apply !text-black !p-[10px] !m-[5px] !w-[99%] !border-none;
+  flex-flow: column !important;
+}
+
+.rbc-event:nth-child(odd) {
+  @apply !bg-[#ddf6fd];
+}
+
+.rbc-event:nth-child(even) {
+  @apply !bg-[#fefce8];
+}
+.rbc-event:nth-child(3n) {
+  @apply !bg-[#f2f1ff];
+}
+
+.rbc-event:nth-child(4n) {
+  @apply !bg-[#fdf2fb];
+}
+
+/* HtmlSheet Table Styling */
+table {
+  @apply bg-[#000000aa] table-auto w-full border-collapse border-gray-300 text-sm font-bold text-left;
+}
+
+tr {
+  @apply text-center;
+}
+
+td,
+th {
+  @apply border border-gray-300 px-4 py-2 text-center;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
